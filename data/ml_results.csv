@@ -1,0 +1,5 @@
+model,MAE,RMSE,R2,model_file
+Linear Regression,4.2362,12.4297,0.8276,linear_regression.joblib
+Random Forest,3.4911,11.871,0.8428,random_forest.joblib
+Gradient Boosting,3.3511,11.7125,0.8469,gradient_boosting.joblib
+XGBoost,3.2555,12.026,0.8386,xgboost_runtime.joblib

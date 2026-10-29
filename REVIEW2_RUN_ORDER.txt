@@ -1,0 +1,23 @@
+RUN THIS IN ORDER
+
+1. Configure .env (copy .env.example, set DB password)
+2. Create PostgreSQL database: sql_optimizer
+3. Run database/schema.sql        (also creates the feedback table)
+4. Run database/seed.sql
+5. pip install -r requirements.txt
+6. python collect_dataset.py      (REPETITIONS is set inside the file)
+7. python ml/train.py            (trains Linear, Random Forest,
+                                   Gradient Boosting, XGBoost and
+                                   writes data/ml_results.csv)
+8. python evaluate_selection.py  (live plan-selection accuracy)
+9. python demo.py                (full demo; records feedback automatically)
+10. python feedback.py show      (feedback loop status)
+11. python feedback.py retrain   (optional: merge feedback + retrain)
+12. streamlit run dashboard.py   <- interactive dashboard (4 pages)
+
+DEMO FLOW:
+SQL -> SQL features -> 2-3 candidate PostgreSQL plans -> actual runtimes
+-> ML prediction -> selected plan -> recorded as feedback.
+
+Note: feedback retraining (step 11) is part of the loop; run it only after
+you have collected enough feedback rows (step 9 and/or feedback.py collect).

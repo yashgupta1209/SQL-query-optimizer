@@ -1,0 +1,9 @@
+psycopg[binary]>=3.2
+sqlglot>=26.0
+pandas>=2.2
+numpy>=2.0
+scikit-learn>=1.5
+xgboost>=2.1
+python-dotenv>=1.0
+streamlit>=1.57
+plotly>=5.0

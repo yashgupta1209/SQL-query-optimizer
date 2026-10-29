@@ -1,0 +1,822 @@
+query_id,query_text,number_of_tables,number_of_joins,number_of_predicates,has_group_by,has_order_by,has_limit,root_node,estimated_startup_cost,estimated_total_cost,estimated_rows,plan_width,plan_depth,operator_count,join_count,hash_join_count,merge_join_count,nested_loop_count,seq_scan_count,index_scan_count,index_only_scan_count,bitmap_scan_count,sort_count,aggregate_count,candidate_name,fingerprint,actual_runtime_ms,planning_time_ms,runtime_samples_ms,best_runtime_ms,runtime_gap_ms,is_actual_best,runtime_gap_percent,predicted_runtime_ms,prediction_error_ms
+DEMO,"
+SELECT c.city, SUM(o.amount)
+FROM customers c
+JOIN orders o
+    ON c.customer_id = o.customer_id
+WHERE c.city IN ('Delhi', 'Faridabad')
+GROUP BY c.city;
+",2,1,1,1,0,0,Aggregate,2296.06,2296.16,8.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,14.684,4.266,,14.684,0.0,True,0.0,10.963811,3.7201890792846672
+DEMO,"
+SELECT c.city, SUM(o.amount)
+FROM customers c
+JOIN orders o
+    ON c.customer_id = o.customer_id
+WHERE c.city IN ('Delhi', 'Faridabad')
+GROUP BY c.city;
+",2,1,1,1,0,0,Aggregate,5220.95,5221.05,8.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,15.027,3.905,,14.684,0.3429999999999999,False,2.33587578316535,34.134052,-19.107052276611327
+Q009,"SELECT *
+        FROM customers
+        WHERE city = 'Jaipur';",1,0,1,0,0,0,Index Scan,0.29,8.24,1.0,29.0,1,1,0,0,0,0,0,1,0,0,0,0,default,Index Scan,0.073,1.171,,0.073,0.0,True,0.0,0.04327148,0.029728521734476085
+Q011,"SELECT customer_id, city
+        FROM customers
+        WHERE city = 'Delhi'
+        ORDER BY customer_id;",1,0,1,0,1,0,Sort,171.9,175.02,1250.0,12.0,3,3,0,0,0,0,0,0,0,2,1,0,default,Sort > Bitmap Heap Scan > Bitmap Index Scan,0.5,1.307,,0.5,0.0,True,0.0,0.55174893,-0.05174893140792847
+Q015,"SELECT customer_id, city
+        FROM customers
+        WHERE city = 'Bangalore'
+        ORDER BY customer_id;",1,0,1,0,1,0,Sort,8.25,8.25,1.0,12.0,2,2,0,0,0,0,0,1,0,0,1,0,default,Sort > Index Scan,0.055,1.218,,0.055,0.0,True,0.0,0.001,0.05399999995250255
+Q019,"SELECT customer_id, city
+        FROM customers
+        WHERE city = 'Jaipur'
+        ORDER BY customer_id;",1,0,1,0,1,0,Sort,8.25,8.25,1.0,12.0,2,2,0,0,0,0,0,1,0,0,1,0,default,Sort > Index Scan,0.05,1.268,,0.05,0.0,True,0.0,0.001,0.04899999995250255
+Q022,"SELECT *
+            FROM customers
+            WHERE city = 'Delhi'
+            LIMIT 25;",1,0,1,0,0,1,Limit,0.0,3.98,25.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.065,1.168,,0.065,0.0,True,0.0,0.053461686,0.011538314223289492
+Q025,"SELECT *
+            FROM customers
+            WHERE city = 'Delhi'
+            LIMIT 200;",1,0,1,0,0,1,Limit,0.0,31.84,200.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.241,1.249,,0.241,0.0,True,0.0,0.27894816,-0.037948158025741585
+Q030,"SELECT *
+            FROM customers
+            WHERE city = 'Faridabad'
+            LIMIT 200;",1,0,1,0,0,1,Limit,0.0,31.84,200.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.152,1.503,,0.152,0.0,True,0.0,0.27894816,-0.12694815802574158
+Q033,"SELECT *
+            FROM customers
+            WHERE city = 'Mumbai'
+            LIMIT 50;",1,0,1,0,0,1,Limit,0.0,7.96,50.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.091,1.41,,0.091,0.0,True,0.0,0.11947742,-0.028477421045303347
+Q039,"SELECT *
+            FROM customers
+            WHERE city = 'Chennai'
+            LIMIT 100;",1,0,1,0,0,1,Limit,0.0,15.92,100.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.103,1.209,,0.103,0.0,True,0.0,0.20432511,-0.10132510972023011
+Q042,"SELECT *
+            FROM customers
+            WHERE city = 'Bangalore'
+            LIMIT 25;",1,0,1,0,0,1,Limit,0.29,8.24,1.0,29.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.035,1.608,,0.035,0.0,True,0.0,0.001,0.03399999995250255
+Q046,"SELECT *
+            FROM customers
+            WHERE city = 'Hyderabad'
+            LIMIT 10;",1,0,1,0,0,1,Limit,0.0,1.59,10.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.068,1.269,,0.068,0.0,True,0.0,0.052948684,0.015051316499710088
+Q055,"SELECT *
+            FROM customers
+            WHERE city = 'Kolkata'
+            LIMIT 200;",1,0,1,0,0,1,Limit,0.0,31.84,200.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.152,1.248,,0.152,0.0,True,0.0,0.27894816,-0.12694815802574158
+Q056,"SELECT *
+            FROM customers
+            WHERE city = 'Pune'
+            LIMIT 10;",1,0,1,0,0,1,Limit,0.0,1.59,10.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.08,1.211,,0.08,0.0,True,0.0,0.052948684,0.027051316499710085
+Q057,"SELECT *
+            FROM customers
+            WHERE city = 'Pune'
+            LIMIT 25;",1,0,1,0,0,1,Limit,0.0,3.98,25.0,29.0,2,2,0,0,0,0,1,0,0,0,0,0,default,Limit > Seq Scan,0.075,1.131,,0.075,0.0,True,0.0,0.053461686,0.021538314223289487
+Q070,"SELECT *
+            FROM customers
+            WHERE city = 'Lucknow'
+            LIMIT 200;",1,0,1,0,0,1,Limit,0.29,8.24,1.0,29.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.03,1.33,,0.03,0.0,True,0.0,0.001,0.028999999952502548
+Q072,"SELECT *
+        FROM orders
+        WHERE customer_id = 500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.136,1.798,,0.136,0.0,True,0.0,0.11708208,0.018917918264865885
+Q073,"SELECT *
+        FROM orders
+        WHERE customer_id = 1000;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.142,1.786,,0.142,0.0,True,0.0,0.11708208,0.024917918264865863
+Q075,"SELECT *
+        FROM orders
+        WHERE customer_id = 2000;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.169,1.92,,0.169,0.0,True,0.0,0.11708208,0.05191791826486589
+Q076,"SELECT *
+        FROM orders
+        WHERE customer_id = 2500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.141,1.8,,0.141,0.0,True,0.0,0.11708208,0.02391791826486586
+Q077,"SELECT *
+        FROM orders
+        WHERE customer_id = 3000;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.138,1.943,,0.138,0.0,True,0.0,0.1474399,-0.009439897060394276
+Q078,"SELECT *
+        FROM orders
+        WHERE customer_id = 3500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.134,1.95,,0.134,0.0,True,0.0,0.1474399,-0.013439897060394279
+Q079,"SELECT *
+        FROM orders
+        WHERE customer_id = 4000;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.174,1.943,,0.174,0.0,True,0.0,0.1474399,0.0265601029396057
+Q082,"SELECT *
+        FROM orders
+        WHERE customer_id = 5500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.167,1.847,,0.167,0.0,True,0.0,0.11708208,0.049917918264865885
+Q090,"SELECT *
+        FROM orders
+        WHERE customer_id = 9500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.0,10.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.196,1.742,,0.196,0.0,True,0.0,0.10878788,0.0872121206521988
+Q093,"SELECT *
+        FROM orders
+        WHERE customer_id = 1000
+          AND amount > 1500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.02,9.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.085,1.817,,0.085,0.0,True,0.0,0.11708208,-0.03208208173513412
+Q101,"SELECT *
+        FROM orders
+        WHERE customer_id = 5000
+          AND amount > 5500;",1,0,1,0,0,0,Bitmap Heap Scan,4.37,41.02,5.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.086,1.889,,0.086,0.0,True,0.0,0.104172826,-0.018172825813293464
+Q113,"SELECT *
+        FROM orders
+        WHERE amount > 1500;",1,0,1,0,0,0,Seq Scan,0.0,1986.0,86027.0,25.0,1,1,0,0,0,0,1,0,0,0,0,0,default,Seq Scan,8.137,1.932,,8.137,0.0,True,0.0,8.065517,0.07148257446289108
+Q116,"SELECT *
+        FROM orders
+        WHERE amount > 3000;",1,0,1,0,0,0,Seq Scan,0.0,1986.0,70998.0,25.0,1,1,0,0,0,0,1,0,0,0,0,0,default,Seq Scan,7.63,1.916,,7.63,0.0,True,0.0,7.4229035,0.20709646224975575
+Q117,"SELECT *
+        FROM orders
+        WHERE amount > 3500;",1,0,1,0,0,0,Seq Scan,0.0,1986.0,65969.0,25.0,1,1,0,0,0,0,1,0,0,0,0,0,default,Seq Scan,7.482,1.809,,7.482,0.0,True,0.0,7.382638,0.09936202239990255
+Q124,"SELECT *
+        FROM orders
+        WHERE amount > 7000;",1,0,1,0,0,0,Bitmap Heap Scan,604.21,1720.72,30441.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,4.444,1.736,,4.444,0.0,True,0.0,4.879336,-0.43533588027954107
+Q132,"SELECT *
+        FROM orders
+        WHERE amount > 2000
+        ORDER BY amount DESC;",1,0,1,0,1,0,Index Scan,0.29,5343.46,81096.0,25.0,1,1,0,0,0,0,0,1,0,0,0,0,default,Index Scan,13.589,1.936,,13.589,0.0,True,0.0,12.629463,0.9595368041992192
+Q137,"SELECT *
+        FROM orders
+        WHERE amount > 4500
+        ORDER BY amount DESC;",1,0,1,0,1,0,Index Scan,0.29,4592.87,55805.0,25.0,1,1,0,0,0,0,0,1,0,0,0,0,default,Index Scan,9.932,1.95,,9.932,0.0,True,0.0,10.0415125,-0.10951248931884727
+Q140,"SELECT *
+        FROM orders
+        WHERE amount > 6000
+        ORDER BY amount DESC;",1,0,1,0,1,0,Index Scan,0.29,4140.98,40497.0,25.0,1,1,0,0,0,0,0,1,0,0,0,0,default,Index Scan,7.458,1.883,,7.458,0.0,True,0.0,8.440124,-0.9821235580444334
+Q153,"SELECT *
+            FROM orders
+            WHERE amount > 1000
+            ORDER BY amount DESC
+            LIMIT 10;",1,0,1,0,1,1,Limit,0.29,0.91,10.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.089,1.864,,0.089,0.0,True,0.0,0.11082846,-0.021828459262847905
+Q165,"SELECT *
+            FROM orders
+            WHERE amount > 2000
+            ORDER BY amount DESC
+            LIMIT 10;",1,0,1,0,1,1,Limit,0.29,0.95,10.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.072,1.857,,0.072,0.0,True,0.0,0.11082846,-0.038828459262847906
+Q180,"SELECT *
+            FROM orders
+            WHERE amount > 3000
+            ORDER BY amount DESC
+            LIMIT 100;",1,0,1,0,1,1,Limit,0.29,7.39,100.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.294,2.001,,0.294,0.0,True,0.0,0.35089967,-0.056899666547775285
+Q192,"SELECT *
+            FROM orders
+            WHERE amount > 4000
+            ORDER BY amount DESC
+            LIMIT 100;",1,0,1,0,1,1,Limit,0.29,8.08,100.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.292,1.893,,0.292,0.0,True,0.0,0.32401136,-0.032011355638504047
+Q196,"SELECT *
+            FROM orders
+            WHERE amount > 4500
+            ORDER BY amount DESC
+            LIMIT 25;",1,0,1,0,1,1,Limit,0.29,2.35,25.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.126,1.922,,0.126,0.0,True,0.0,0.12981074,-0.003810735583305358
+Q204,"SELECT *
+            FROM orders
+            WHERE amount > 5000
+            ORDER BY amount DESC
+            LIMIT 100;",1,0,1,0,1,1,Limit,0.29,9.06,100.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.3,1.82,,0.3,0.0,True,0.0,0.32401136,-0.02401135563850404
+Q209,"SELECT *
+            FROM orders
+            WHERE amount > 5500
+            ORDER BY amount DESC
+            LIMIT 50;",1,0,1,0,1,1,Limit,0.29,5.01,50.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.242,1.89,,0.242,0.0,True,0.0,0.20591877,0.03608122599124908
+Q218,"SELECT *
+            FROM orders
+            WHERE amount > 6000
+            ORDER BY amount DESC
+            LIMIT 500;",1,0,1,0,1,1,Limit,0.29,51.42,500.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,1.012,1.809,,1.012,0.0,True,0.0,0.7683509,0.24364910078048707
+Q227,"SELECT *
+            FROM orders
+            WHERE amount > 7000
+            ORDER BY amount DESC
+            LIMIT 50;",1,0,1,0,1,1,Limit,0.29,6.61,50.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.2,1.81,,0.2,0.0,True,0.0,0.20591877,-0.005918774008750904
+Q234,"SELECT *
+            FROM orders
+            WHERE amount > 7500
+            ORDER BY amount DESC
+            LIMIT 100;",1,0,1,0,1,1,Limit,0.29,14.8,100.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.294,1.789,,0.294,0.0,True,0.0,0.33245215,-0.03845214819908144
+Q244,"SELECT *
+            FROM orders
+            WHERE amount > 8500
+            ORDER BY amount DESC
+            LIMIT 25;",1,0,1,0,1,1,Limit,0.29,5.92,25.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.12,1.78,,0.12,0.0,True,0.0,0.12981074,-0.009810735583305363
+Q245,"SELECT *
+            FROM orders
+            WHERE amount > 8500
+            ORDER BY amount DESC
+            LIMIT 50;",1,0,1,0,1,1,Limit,0.29,11.56,50.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.193,1.798,,0.193,0.0,True,0.0,0.20962812,-0.016628120064735408
+Q248,"SELECT *
+            FROM orders
+            WHERE amount > 8500
+            ORDER BY amount DESC
+            LIMIT 500;",1,0,1,0,1,1,Limit,0.29,112.93,500.0,25.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.981,1.923,,0.981,0.0,True,0.0,0.76467925,0.2163207468986511
+Q275,"SELECT c.city, SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Mumbai'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2153.1,1.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.29,2.825,,9.255,1.0349999999999984,False,11.183144246353304,10.553794,-0.2637939071655282
+Q275,"SELECT c.city, SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Mumbai'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4384.23,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,9.255,2.879,,9.255,0.0,True,0.0,9.56668,-0.3116799545288078
+Q278,"SELECT c.city, SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Hyderabad'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2153.1,1.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.375,3.08,,9.27,1.1050000000000004,False,11.920172599784255,10.690154,-0.3151540756225586
+Q278,"SELECT c.city, SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Hyderabad'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4384.23,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,9.27,2.932,,9.27,0.0,True,0.0,9.526646,-0.25664566040039105
+Q280,"SELECT c.city, SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Pune'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2153.1,1.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,11.0,2.922,,9.225,1.7750000000000004,False,19.241192411924125,10.546434,0.4535655975341797
+Q280,"SELECT c.city, SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Pune'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4384.23,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,9.225,2.835,,9.225,0.0,True,0.0,9.521773,-0.29677333831787145
+Q284,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Faridabad'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2153.1,1.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.212,2.839,,10.212,0.0,True,0.0,10.553794,-0.3417939071655276
+Q284,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Faridabad'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4384.23,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,10.581,2.801,,10.212,0.3689999999999998,False,3.613396004700351,9.829202,0.7517983016967769
+Q287,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Bangalore'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,4.66,49.38,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,default,Aggregate > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan,0.047,2.871,,0.047,0.0,True,0.0,0.31438014,-0.26738013911247255
+Q287,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Bangalore'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,8.25,2006.9,1.0,40.0,4,5,1,1,0,0,1,1,0,0,0,1,no_nested_loop,Aggregate > Hash Join > Seq Scan > Hash > Index Scan,0.132,2.894,,0.047,0.085,False,180.85106382978725,0.2119596,-0.07995960044860839
+Q289,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Kolkata'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2153.1,1.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.195,2.988,,9.133,1.0620000000000012,False,11.628161611737667,10.528918,-0.33391826629638643
+Q289,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Kolkata'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4384.23,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,9.133,2.881,,9.133,0.0,True,0.0,9.56668,-0.4336799545288095
+Q290,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Pune'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2153.1,1.0,40.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.863,2.954,,10.146,0.7169999999999987,False,7.066824364281478,10.534569,0.3284312133789058
+Q290,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Pune'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4384.23,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,10.146,2.823,,10.146,0.0,True,0.0,9.521773,0.6242266616821297
+Q291,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Jaipur'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,4.66,49.38,1.0,40.0,4,5,1,0,0,1,0,1,0,2,0,1,default,Aggregate > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan,0.051,2.798,,0.051,0.0,True,0.0,0.6841962,-0.6331961741447448
+Q291,"SELECT c.city, AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Jaipur'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,8.25,2006.9,1.0,40.0,4,5,1,1,0,0,1,1,0,0,0,1,no_nested_loop,Aggregate > Hash Join > Seq Scan > Hash > Index Scan,0.132,3.052,,0.051,0.081,False,158.82352941176475,0.15268202,-0.02068202126026153
+Q297,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Bangalore'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,4.66,49.4,1.0,72.0,4,5,1,0,0,1,0,1,0,2,0,1,default,Aggregate > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan,0.053,2.842,,0.053,0.0,True,0.0,0.22745219,-0.17445218873023988
+Q297,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Bangalore'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,8.25,2006.92,1.0,72.0,4,5,1,1,0,0,1,1,0,0,0,1,no_nested_loop,Aggregate > Hash Join > Seq Scan > Hash > Index Scan,0.214,3.025,,0.053,0.161,False,303.7735849056604,0.41677105,-0.2027710542678833
+Q298,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Hyderabad'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2184.34,1.0,72.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.406,2.827,,9.709,0.697000000000001,False,7.178906169533433,10.786255,-0.3802548828124994
+Q298,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Hyderabad'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4415.48,1.0,72.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,9.709,2.985,,9.709,0.0,True,0.0,10.084818,-0.37581788635253943
+Q299,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Kolkata'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2184.34,1.0,72.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,10.458,3.145,,10.245,0.2130000000000009,False,2.0790629575402733,11.784556,-1.3265563888549803
+Q299,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Kolkata'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4415.48,1.0,72.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,10.245,2.914,,10.245,0.0,True,0.0,10.095475,0.1495248031616203
+Q302,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Lucknow'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,4.66,49.4,1.0,72.0,4,5,1,0,0,1,0,1,0,2,0,1,default,Aggregate > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan,0.055,2.993,,0.055,0.0,True,0.0,0.3053429,-0.2503429126739502
+Q302,"SELECT c.city, MAX(o.amount), MIN(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Lucknow'
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,8.25,2006.92,1.0,72.0,4,5,1,1,0,0,1,1,0,0,0,1,no_nested_loop,Aggregate > Hash Join > Seq Scan > Hash > Index Scan,0.201,2.99,,0.055,0.146,False,265.4545454545455,0.16810003,0.032899970769882214
+Q304,"SELECT c.city, COUNT(*), SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Faridabad'
+          AND o.amount > 1500
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,123.22,2388.92,1.0,48.0,5,6,1,1,0,0,1,0,0,2,0,1,default,Aggregate > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,11.436,2.906,,9.088,2.3480000000000008,False,25.83626760563381,10.828726,0.607274185180664
+Q304,"SELECT c.city, COUNT(*), SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Faridabad'
+          AND o.amount > 1500
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,18.27,4425.49,1.0,48.0,4,5,1,0,0,1,0,1,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,9.088,2.888,,9.088,0.0,True,0.0,9.746696,-0.6586964721679696
+Q312,"SELECT c.city, COUNT(*), SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Lucknow'
+          AND o.amount > 500
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,4.66,49.43,1.0,48.0,4,5,1,0,0,1,0,1,0,2,0,1,default,Aggregate > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan,0.047,2.923,,0.047,0.0,True,0.0,0.25558117,-0.20858117032051088
+Q312,"SELECT c.city, COUNT(*), SUM(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Lucknow'
+          AND o.amount > 500
+        GROUP BY c.city;",2,1,1,1,0,0,Aggregate,8.25,2246.13,1.0,48.0,4,5,1,1,0,0,1,1,0,0,0,1,no_nested_loop,Aggregate > Hash Join > Seq Scan > Hash > Index Scan,0.148,2.848,,0.047,0.1009999999999999,False,214.89361702127653,8.786635,-8.638635398864746
+Q317,"SELECT c.city, SUM(o.amount) AS total_amount
+    FROM customers c
+    JOIN orders o
+      ON c.customer_id = o.customer_id
+    GROUP BY c.city
+    ORDER BY total_amount DESC;",2,1,0,1,1,0,Sort,2797.83,2797.85,8.0,40.0,5,6,1,1,0,0,2,0,0,0,1,1,default,Sort > Aggregate > Hash Join > Seq Scan > Hash > Seq Scan,26.39,2.986,,26.39,0.0,True,0.0,25.00081,1.3891893768310553
+Q317,"SELECT c.city, SUM(o.amount) AS total_amount
+    FROM customers c
+    JOIN orders o
+      ON c.customer_id = o.customer_id
+    GROUP BY c.city
+    ORDER BY total_amount DESC;",2,1,0,1,1,0,Sort,7158.74,7158.76,8.0,40.0,4,5,1,0,1,0,0,2,0,0,1,1,no_hash_join,Sort > Aggregate > Merge Join > Index Scan > Index Scan,43.942,2.897,,26.39,17.552,False,66.51004168245547,47.990677,-4.048676879882812
+Q332,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Delhi'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,3278.08,6161.78,1.0,16.0,9,11,2,2,0,0,2,0,0,2,0,2,default,Aggregate > Gather > Aggregate > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,35.4,4.039,,35.4,0.0,True,0.0,36.748627,-1.3486267089843764
+Q332,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Delhi'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,18.69,11188.98,1.0,16.0,5,7,2,0,0,2,0,2,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan,37.385,3.94,,35.4,1.9849999999999997,False,5.60734463276836,40.143543,-2.758543243408205
+Q336,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Bangalore'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,5.08,54.82,1.0,16.0,5,7,2,0,0,2,0,2,0,2,0,1,default,Aggregate > Nested Loop > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,0.061,4.265,,0.061,0.0,True,0.0,0.001,0.05999999995250255
+Q336,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Bangalore'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,3006.99,5707.01,1.0,16.0,8,10,2,2,0,0,2,1,0,0,0,2,no_nested_loop,Aggregate > Gather > Aggregate > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Index Scan,33.764,4.295,,0.061,33.703,False,55250.81967213115,32.640156,1.1238442077636748
+Q338,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Kolkata'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,3278.08,6161.78,1.0,16.0,9,11,2,2,0,0,2,0,0,2,0,2,default,Aggregate > Gather > Aggregate > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,36.396,4.171,,36.396,0.0,True,0.0,37.349472,-0.9534720458984367
+Q338,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Kolkata'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,18.69,11188.98,1.0,16.0,5,7,2,0,0,2,0,2,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan,40.256,4.249,,36.396,3.86,False,10.605561050664909,38.006046,2.2499537048339846
+Q340,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Jaipur'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,5.08,54.82,1.0,16.0,5,7,2,0,0,2,0,2,0,2,0,1,default,Aggregate > Nested Loop > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan > Index Scan,0.05,4.097,,0.05,0.0,True,0.0,0.45913306,-0.4091330587863922
+Q340,"SELECT c.city, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        WHERE c.city = 'Jaipur'
+        GROUP BY c.city;",3,2,1,1,0,0,Aggregate,3006.99,5707.01,1.0,16.0,8,10,2,2,0,0,2,1,0,0,0,2,no_nested_loop,Aggregate > Gather > Aggregate > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Index Scan,37.043,4.014,,0.05,36.993,False,73986.0,32.707024,4.3359763793945305
+Q353,"SELECT c.city, o.status, SUM(oi.quantity)
+    FROM customers c
+    JOIN orders o
+      ON c.customer_id = o.customer_id
+    JOIN order_items oi
+      ON o.order_id = oi.order_id
+    GROUP BY c.city, o.status;",3,2,0,1,0,0,Aggregate,8044.74,8051.62,32.0,24.0,8,11,2,2,0,0,3,0,0,0,1,2,default,Aggregate > Gather Merge > Sort > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Seq Scan,72.144,4.041,,72.144,0.0,True,0.0,70.04899,2.095011657714849
+Q353,"SELECT c.city, o.status, SUM(oi.quantity)
+    FROM customers c
+    JOIN orders o
+      ON c.customer_id = o.customer_id
+    JOIN order_items oi
+      ON o.order_id = oi.order_id
+    GROUP BY c.city, o.status;",3,2,0,1,0,0,Aggregate,21705.13,21712.01,32.0,24.0,9,11,2,0,1,1,0,3,0,0,1,2,no_hash_join,Aggregate > Gather Merge > Sort > Aggregate > Merge Join > Index Scan > Materialize > Nested Loop > Index Scan > Memoize > Index Scan,116.214,4.248,,72.144,44.06999999999999,False,61.0861610113107,84.50009,31.713908447265624
+Q355,"SELECT c.city, p.category, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Delhi'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,6387.58,6388.58,5.0,23.0,11,15,3,3,0,0,3,0,0,2,1,2,default,Aggregate > Gather Merge > Sort > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan > Hash > Seq Scan,39.168,4.835,,39.168,0.0,True,0.0,38.79302,0.37498165893554614
+Q355,"SELECT c.city, p.category, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Delhi'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,13381.1,13381.15,5.0,23.0,6,10,3,0,0,3,0,3,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Nested Loop > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan > Memoize > Index Scan,50.462,4.671,,39.168,11.294000000000004,False,28.83476307189544,41.86247,8.599531280517581
+Q368,"SELECT c.city, p.category, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE p.category = 'Home'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,7206.97,7208.71,8.0,23.0,9,14,3,3,0,0,4,0,0,0,1,2,default,Aggregate > Gather Merge > Sort > Aggregate > Hash Join > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Seq Scan > Hash > Seq Scan,144.952,4.787,,63.48,81.47200000000001,False,128.34278512917456,47.957325,96.99467501831055
+Q368,"SELECT c.city, p.category, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE p.category = 'Home'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,18285.31,18285.39,8.0,23.0,6,10,3,0,1,2,1,3,0,0,1,1,no_hash_join,Aggregate > Nested Loop > Merge Join > Index Scan > Sort > Nested Loop > Seq Scan > Index Scan > Memoize > Index Scan,63.48,4.644,,63.48,0.0,True,0.0,57.46173,6.018269042968747
+Q370,"SELECT c.city, p.category, SUM(oi.quantity), AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Delhi'
+          AND p.category = 'Electronics'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,3391.08,6091.23,1.0,55.0,9,14,3,3,0,0,3,0,0,2,0,2,default,Aggregate > Gather > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,36.739,4.788,,36.739,0.0,True,0.0,37.24644,-0.5074408874511747
+Q370,"SELECT c.city, p.category, SUM(oi.quantity), AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Delhi'
+          AND p.category = 'Electronics'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,18.98,13293.61,1.0,55.0,6,10,3,0,0,3,0,3,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Nested Loop > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan > Memoize > Index Scan,45.397,4.896,,36.739,8.658000000000001,False,23.56623751326928,51.73104,-6.334040954589845
+Q373,"SELECT c.city, p.category, SUM(oi.quantity), AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Chennai'
+          AND p.category = 'Home'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,3391.08,6091.23,1.0,55.0,9,14,3,3,0,0,3,0,0,2,0,2,default,Aggregate > Gather > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,39.005,4.836,,39.005,0.0,True,0.0,36.97195,2.033049468994143
+Q373,"SELECT c.city, p.category, SUM(oi.quantity), AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Chennai'
+          AND p.category = 'Home'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,18.98,13293.61,1.0,55.0,6,10,3,0,0,3,0,3,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Nested Loop > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan > Memoize > Index Scan,42.211,4.923,,39.005,3.205999999999996,False,8.219459043712334,46.582504,-4.371504272460939
+Q379,"SELECT c.city, p.category, SUM(oi.quantity), AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Lucknow'
+          AND p.category = 'Sports'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,5.36,60.86,1.0,55.0,6,9,3,0,0,3,0,3,0,2,0,1,default,Aggregate > Nested Loop > Nested Loop > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan,0.123,4.635,,0.123,0.0,True,0.0,0.001,0.12199999995250255
+Q379,"SELECT c.city, p.category, SUM(oi.quantity), AVG(o.amount)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Lucknow'
+          AND p.category = 'Sports'
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,3119.99,5776.05,1.0,55.0,8,13,3,3,0,0,3,1,0,0,0,2,no_nested_loop,Aggregate > Gather > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Index Scan,36.189,4.715,,0.123,36.066,False,29321.9512195122,39.822178,-3.6331778869628906
+Q383,"SELECT c.city, p.category, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Chennai'
+          AND o.amount > 2000
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,6509.38,6510.39,5.0,23.0,11,15,3,3,0,0,3,0,0,2,1,2,default,Aggregate > Gather Merge > Sort > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan > Hash > Seq Scan,37.778,4.779,,37.778,0.0,True,0.0,39.17337,-1.3953703613281263
+Q383,"SELECT c.city, p.category, SUM(oi.quantity)
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Chennai'
+          AND o.amount > 2000
+        GROUP BY c.city, p.category;",4,3,1,1,0,0,Aggregate,12123.15,12123.2,5.0,23.0,6,10,3,0,0,3,0,3,0,2,0,1,no_hash_join,Aggregate > Nested Loop > Nested Loop > Nested Loop > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan > Memoize > Index Scan,40.124,4.942,,37.778,2.346000000000004,False,6.209963470803123,43.663948,-3.539948059082029
+Q390,"SELECT c.city, p.category, SUM(oi.quantity) AS total_quantity
+    FROM customers c
+    JOIN orders o
+      ON c.customer_id = o.customer_id
+    JOIN order_items oi
+      ON o.order_id = oi.order_id
+    JOIN products p
+      ON oi.product_id = p.product_id
+    GROUP BY c.city, p.category
+    ORDER BY total_quantity DESC;",4,3,0,1,1,0,Sort,8514.4,8514.5,40.0,23.0,10,15,3,3,0,0,4,0,0,0,2,2,default,Sort > Aggregate > Gather Merge > Sort > Aggregate > Hash Join > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Seq Scan > Hash > Seq Scan,80.687,5.115,,80.687,0.0,True,0.0,85.75162,-5.064617431640627
+Q390,"SELECT c.city, p.category, SUM(oi.quantity) AS total_quantity
+    FROM customers c
+    JOIN orders o
+      ON c.customer_id = o.customer_id
+    JOIN order_items oi
+      ON o.order_id = oi.order_id
+    JOIN products p
+      ON oi.product_id = p.product_id
+    GROUP BY c.city, p.category
+    ORDER BY total_quantity DESC;",4,3,0,1,1,0,Sort,26160.59,26160.69,40.0,23.0,10,15,3,0,1,2,0,4,0,0,2,2,no_hash_join,Sort > Aggregate > Gather Merge > Sort > Aggregate > Merge Join > Nested Loop > Index Scan > Memoize > Index Scan > Materialize > Nested Loop > Index Scan > Memoize > Index Scan,156.206,4.801,,80.687,75.51899999999999,False,93.595002912489,102.34862,53.85738244628905
+Q396,"SELECT o.status,
+           p.category,
+           COUNT(*) AS item_count,
+           SUM(oi.quantity) AS total_quantity,
+           AVG(o.amount) AS avg_amount
+    FROM orders o
+    JOIN order_items oi
+      ON o.order_id = oi.order_id
+    JOIN products p
+      ON oi.product_id = p.product_id
+    GROUP BY o.status, p.category;",3,2,0,1,0,0,Aggregate,8484.18,8488.81,20.0,63.0,8,11,2,2,0,0,3,0,0,0,1,2,default,Aggregate > Gather Merge > Sort > Aggregate > Hash Join > Hash Join > Seq Scan > Hash > Seq Scan > Hash > Seq Scan,74.34,4.0,,74.34,0.0,True,0.0,72.07608,2.2639196777343784
+Q396,"SELECT o.status,
+           p.category,
+           COUNT(*) AS item_count,
+           SUM(oi.quantity) AS total_quantity,
+           AVG(o.amount) AS avg_amount
+    FROM orders o
+    JOIN order_items oi
+      ON o.order_id = oi.order_id
+    JOIN products p
+      ON oi.product_id = p.product_id
+    GROUP BY o.status, p.category;",3,2,0,1,0,0,Aggregate,20845.04,20849.67,20.0,63.0,8,10,2,0,1,1,0,3,0,0,1,2,no_hash_join,Aggregate > Gather Merge > Sort > Aggregate > Merge Join > Nested Loop > Index Scan > Memoize > Index Scan > Index Scan,115.398,3.798,,74.34,41.05799999999999,False,55.23002421307505,85.0796,30.318402526855465
+Q398,"SELECT *
+        FROM customers
+        WHERE city IN ('Faridabad', 'Mumbai');",1,0,1,0,0,0,Bitmap Heap Scan,35.95,141.19,2500.0,29.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.439,1.375,,0.439,0.0,True,0.0,0.4160549,0.02294509553909302
+Q400,"SELECT *
+        FROM customers
+        WHERE city IN ('Chennai', 'Bangalore');",1,0,1,0,0,0,Bitmap Heap Scan,18.26,107.88,1250.0,29.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.347,1.243,,0.347,0.0,True,0.0,0.40781048,-0.06081047940254214
+Q401,"SELECT *
+        FROM customers
+        WHERE city IN ('Bangalore', 'Hyderabad');",1,0,1,0,0,0,Bitmap Heap Scan,18.26,107.88,1250.0,29.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,0.355,1.322,,0.355,0.0,True,0.0,0.40781048,-0.05281047940254213
+Q409,"SELECT *
+        FROM orders
+        WHERE amount > 1500
+          AND amount < 4000;",1,0,1,0,0,0,Bitmap Heap Scan,561.02,1672.73,25047.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,3.845,1.946,,3.845,0.0,True,0.0,3.870394,-0.02539399147033672
+Q417,"SELECT *
+        FROM orders
+        WHERE amount > 5500
+          AND amount < 8000;",1,0,1,0,0,0,Bitmap Heap Scan,562.0,1675.13,25142.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,3.819,1.858,,3.819,0.0,True,0.0,3.8400364,-0.021036392211914112
+Q420,"SELECT *
+        FROM orders
+        WHERE amount > 7000
+          AND amount < 9500;",1,0,1,0,0,0,Bitmap Heap Scan,567.96,1683.95,25333.0,25.0,2,2,0,0,0,0,0,0,0,2,0,0,default,Bitmap Heap Scan > Bitmap Index Scan,3.821,1.882,,3.821,0.0,True,0.0,3.8400364,-0.01903639221191389
+Q423,"SELECT order_id, customer_id, amount, status
+        FROM orders
+        WHERE amount > 2000
+        ORDER BY amount DESC
+        LIMIT 25;",1,0,1,0,1,1,Limit,0.29,1.94,25.0,21.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.119,2.055,,0.119,0.0,True,0.0,0.16192934,-0.04292933917045594
+Q426,"SELECT order_id, customer_id, amount, status
+        FROM orders
+        WHERE amount > 3500
+        ORDER BY amount DESC
+        LIMIT 200;",1,0,1,0,1,1,Limit,0.29,15.13,200.0,21.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.456,2.073,,0.456,0.0,True,0.0,0.49188605,-0.035886049509048445
+Q428,"SELECT order_id, customer_id, amount, status
+        FROM orders
+        WHERE amount > 4500
+        ORDER BY amount DESC
+        LIMIT 10;",1,0,1,0,1,1,Limit,0.29,1.12,10.0,21.0,2,2,0,0,0,0,0,1,0,0,0,0,default,Limit > Index Scan,0.077,1.956,,0.077,0.0,True,0.0,0.1397918,-0.06279180157184601
+Q433,"SELECT c.city, o.order_id, o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Faridabad'
+        ORDER BY o.amount DESC
+        LIMIT 25;",2,1,1,0,1,1,Limit,0.59,23.04,25.0,17.0,4,5,1,0,0,1,0,2,0,0,0,0,default,Limit > Nested Loop > Index Scan > Memoize > Index Scan,0.92,2.786,,0.92,0.0,True,0.0,0.9288348,-0.008834795951843222
+Q433,"SELECT c.city, o.order_id, o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Faridabad'
+        ORDER BY o.amount DESC
+        LIMIT 25;",2,1,1,0,1,1,Limit,2474.57,2474.64,25.0,17.0,6,7,1,1,0,0,1,0,0,2,1,0,no_nested_loop,Limit > Sort > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,13.515,3.113,,0.92,12.595,False,1369.0217391304348,12.857256,0.6577440643310553
+Q437,"SELECT c.city, o.order_id, o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Hyderabad'
+        ORDER BY o.amount DESC
+        LIMIT 500;",2,1,1,0,1,1,Limit,0.59,449.69,500.0,17.0,4,5,1,0,0,1,0,2,0,0,0,0,default,Limit > Nested Loop > Index Scan > Memoize > Index Scan,4.742,2.809,,4.742,0.0,True,0.0,1.9231215,2.818878547668457
+Q437,"SELECT c.city, o.order_id, o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Hyderabad'
+        ORDER BY o.amount DESC
+        LIMIT 500;",2,1,1,0,1,1,Limit,2744.7,2745.95,500.0,17.0,6,7,1,1,0,0,1,0,0,2,1,0,no_nested_loop,Limit > Sort > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,14.054,3.041,,4.742,9.312,False,196.37283846478283,13.388627,0.6653729476928714
+Q439,"SELECT c.city, o.order_id, o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Pune'
+        ORDER BY o.amount DESC
+        LIMIT 25;",2,1,1,0,1,1,Limit,0.59,23.04,25.0,17.0,4,5,1,0,0,1,0,2,0,0,0,0,default,Limit > Nested Loop > Index Scan > Memoize > Index Scan,0.941,2.833,,0.941,0.0,True,0.0,0.5664918,0.37450821733474726
+Q439,"SELECT c.city, o.order_id, o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        WHERE c.city = 'Pune'
+        ORDER BY o.amount DESC
+        LIMIT 25;",2,1,1,0,1,1,Limit,2474.57,2474.64,25.0,17.0,6,7,1,1,0,0,1,0,0,2,1,0,no_nested_loop,Limit > Sort > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan,13.287,2.954,,0.941,12.346,False,1312.008501594049,12.854036,0.432963668823243
+Q442,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Delhi'
+        ORDER BY o.amount DESC
+        LIMIT 10;",4,3,1,0,1,1,Limit,1.3,9.35,10.0,24.0,6,10,3,0,0,3,0,4,0,0,0,0,default,Limit > Nested Loop > Nested Loop > Nested Loop > Index Scan > Memoize > Index Scan > Index Scan > Memoize > Index Scan,0.693,4.965,,0.693,0.0,True,0.0,0.001,0.6919999999525025
+Q442,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Delhi'
+        ORDER BY o.amount DESC
+        LIMIT 10;",4,3,1,0,1,1,Limit,6631.73,6632.87,10.0,24.0,10,14,3,3,0,0,3,0,0,2,1,0,no_nested_loop,Limit > Gather Merge > Sort > Hash Join > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan > Hash > Seq Scan,50.46,4.87,,0.693,49.767,False,7181.385281385282,53.114967,-2.6549673461914054
+Q443,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Faridabad'
+        ORDER BY o.amount DESC
+        LIMIT 25;",4,3,1,0,1,1,Limit,1.3,21.43,25.0,24.0,6,10,3,0,0,3,0,4,0,0,0,0,default,Limit > Nested Loop > Nested Loop > Nested Loop > Index Scan > Memoize > Index Scan > Index Scan > Memoize > Index Scan,1.014,4.956,,1.014,0.0,True,0.0,0.001,1.0129999999525026
+Q443,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Faridabad'
+        ORDER BY o.amount DESC
+        LIMIT 25;",4,3,1,0,1,1,Limit,6728.93,6731.78,25.0,24.0,10,14,3,3,0,0,3,0,0,2,1,0,no_nested_loop,Limit > Gather Merge > Sort > Hash Join > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan > Hash > Seq Scan,50.822,4.807,,1.014,49.808,False,4912.031558185405,49.833115,0.9888853759765652
+Q446,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Bangalore'
+        ORDER BY o.amount DESC
+        LIMIT 200;",4,3,1,0,1,1,Limit,61.21,61.26,20.0,24.0,7,10,3,0,0,3,0,3,0,2,1,0,default,Limit > Sort > Nested Loop > Nested Loop > Nested Loop > Index Scan > Bitmap Heap Scan > Bitmap Index Scan > Index Scan > Index Scan,0.111,4.958,,0.111,0.0,True,0.0,0.001,0.10999999995250255
+Q446,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Bangalore'
+        ORDER BY o.amount DESC
+        LIMIT 200;",4,3,1,0,1,1,Limit,5859.72,5859.77,20.0,24.0,9,13,3,3,0,0,3,1,0,0,1,0,no_nested_loop,Limit > Sort > Gather > Hash Join > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Index Scan > Hash > Seq Scan,138.696,4.793,,0.111,138.585,False,124851.35135135136,84.33872,54.35727777099609
+Q447,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Hyderabad'
+        ORDER BY o.amount DESC
+        LIMIT 500;",4,3,1,0,1,1,Limit,1.3,403.9,500.0,24.0,6,10,3,0,0,3,0,4,0,0,0,0,default,Limit > Nested Loop > Nested Loop > Nested Loop > Index Scan > Memoize > Index Scan > Index Scan > Memoize > Index Scan,6.219,4.75,,6.219,0.0,True,0.0,1.7573556,4.4616444292068485
+Q447,"SELECT c.city,
+               p.category,
+               oi.quantity,
+               o.amount
+        FROM customers c
+        JOIN orders o
+          ON c.customer_id = o.customer_id
+        JOIN order_items oi
+          ON o.order_id = oi.order_id
+        JOIN products p
+          ON oi.product_id = p.product_id
+        WHERE c.city = 'Hyderabad'
+        ORDER BY o.amount DESC
+        LIMIT 500;",4,3,1,0,1,1,Limit,7046.72,7103.71,500.0,24.0,10,14,3,3,0,0,3,0,0,2,1,0,no_nested_loop,Limit > Gather Merge > Sort > Hash Join > Hash Join > Seq Scan > Hash > Hash Join > Seq Scan > Hash > Bitmap Heap Scan > Bitmap Index Scan > Hash > Seq Scan,39.956,4.852,,6.219,33.737,False,542.4827142627432,59.654697,-19.698697418212888
